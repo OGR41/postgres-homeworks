@@ -11,7 +11,7 @@ CREATE TABLE employees
 
 CREATE TABLE customers
 (
-	customer_id name PRIMARY KEY,
+	customer_id varchar(5) PRIMARY KEY,
 	company_name name,
 	contact_name name
 );
@@ -19,7 +19,7 @@ CREATE TABLE customers
 CREATE TABLE orders
 (
 	order_id int PRIMARY KEY,
-	customer_id name,
+	customer_id varchar(5),
 	employee_id int,
 	order_date date,
 	ship_city name

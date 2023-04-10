@@ -11,13 +11,17 @@ with psycopg2.connect(host='localhost', database='north', user='postgres', passw
         cur.execute("truncate " + 'employees' + ";")
         cur.copy_expert(sql=sql % 'employees', file=e)
 
+        sql = "COPY %s FROM STDIN WITH CSV HEADER DELIMITER AS ','"
         c = open('north_data/customers_data.csv', 'r', encoding='utf8')
         next(c)
-        cur.copy_from(c, 'customers', sep=',')
+        cur.execute("truncate " + 'customers' + ";")
+        cur.copy_expert(sql=sql % 'customers', file=c)
 
+        sql = "COPY %s FROM STDIN WITH CSV HEADER DELIMITER AS ','"
         o = open('north_data/orders_data.csv', 'r', encoding='utf8')
         next(o)
-        cur.copy_from(o, 'orders', sep=',')
+        cur.execute("truncate " + 'orders' + ";")
+        cur.copy_expert(sql=sql % 'orders', file=o)
 
         conn.commit()
 
