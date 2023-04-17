@@ -7,7 +7,8 @@ JOIN customers USING (customer_id)
 JOIN employees USING (employee_id)
 JOIN shippers ON customers.city='London'
                      AND employees.city='London'
-                     AND ship_via = shipper_id;
+                     AND ship_via = shipper_id
+					 AND shippers.company_name = 'United Package';
 
 -- 2. Наименование продукта, количество товара (product_name и units_in_stock в табл products),
 -- имя поставщика и его телефон (contact_name и phone в табл suppliers) для таких продуктов,
@@ -19,7 +20,7 @@ JOIN suppliers USING (supplier_id)
 WHERE discontinued=0
           AND units_in_stock < 25
           AND products.category_id IN (2, 4)
-ORDER BY units_in_stock
+ORDER BY units_in_stock;
 
 -- 3. Список компаний заказчиков (company_name из табл customers), не сделавших ни одного заказа
 SELECT company_name
@@ -29,11 +30,16 @@ WHERE NOT EXISTS
 	SELECT *
 	FROM orders
 	WHERE customers.customer_id = orders.customer_id
-)
+);
+
 
 -- 4. уникальные названия продуктов, которых заказано ровно 10 единиц (количество заказанных единиц см в колонке quantity табл order_details)
 -- Этот запрос написать именно с использованием подзапроса.
-SELECT DISTINCT product_name
+SELECT product_name
 FROM products
-JOIN order_details USING (product_id)
-WHERE quantity = 10
+WHERE product_id IN
+(
+	SELECT product_id
+	FROM order_details
+	WHERE quantity = 10
+);
